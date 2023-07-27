@@ -1,0 +1,55 @@
+-step for the installation
+-install python for All user (in Advance option select Install for All users) and select to include PATH (look for the installtion package at c:\Temp in WK1)
+-To upgrade pyPreservica:
+-copy "pyPreservica-2.0.0.tar.gz" on the C:\Temp folder
+From the cmd as Admin go to c:\Temp
+-python pip install pyPreservica
+
+to run the script "upload-file.py" always use: python upload-file.py
+
+****the following are other testing*****
+
+-to import pyPreservica:
+-to import the os module
+>>> import os 
+>>> os.getcwd() 
+-to know the current dir
+'C:\\py-preservica\\Scripts'
+-to import all modules
+>>> from pyPreservica import * 
+-to authenticate
+>>> client = EntityAPI(username="admin_hague", password="admin_hague", tenant="MICT", server="preservica-test.mict.local", protocol="http") 
+
+-to upload files in a zip with metadata files (it creates a folder)
+>>> upload = UploadAPI(username="admin_hague", password="admin_hague", tenant="MICT", server="preservica-test.mict.local", protocol="http")
+folder = client.folder("19a2261c-b284-46bc-a268-84e974c67a41")
+upload.upload_zip_package(path_to_zip_package="C:\manual-upload\WindowsInstallationGuide.zip", folder=folder)
+
+-to upload multiple files into a folder (this from James didn't work correctly)
+from pyPreservica import *
+import glob
+directory = "C:\\TEMP\Preservica-6.5-test\\Move-collection-6.5-3\\*.*"
+upload = UploadAPI(username="admin_hague", password="admin_hague", tenant="MICT", server="preservica-test.mict.local", protocol="http")
+for file in glob.glob(directory):
+    p = simple_asset_package(preservation_file=file, parent_folder="ee8f0397-6d8e-4b13-9d14-c375274d40dc")
+    upload.upload_zip_package(p)
+    print("Upload Complete {file}")
+
+-to create and upload packages of ONE file with representations (preservation and access)
+from pyPreservica import *
+client = EntityAPI(username="admin_hague", password="admin_hague", tenant="MICT", server="preservica-test.mict.local", protocol="http") 
+upload = UploadAPI(username="admin_hague", password="admin_hague", tenant="MICT", server="preservica-test.mict.local", protocol="http")
+folder = client.folder("a175a83d-fa10-42c4-8b64-821adfa67817")
+-to add a preservation copy
+package_path = simple_asset_package(preservation_file="C:\TEMP\Preservica-6.5-test\Move-collection-6.5-3\DB1016693.DOC", access_file="C:\TEMP\Preservica-6.5-test\Move-collection-6.5-3\WindowsInstallationGuide.pdf", parent_folder=folder, Title="Asset Title", Description="Asset Description")															
+upload.upload_zip_package(path_to_zip_package=package_path)
+
+package_path = simple_asset_package(preservation_file="C:\TEMP\Preservica-6.5-test\Move-collection-6.5-3\DB1016693.DOC", access_file="C:\TEMP\Preservica-6.5-test\Move-collection-6.5-3\WindowsInstallationGuide.pdf", parent_folder=folder, Title="Asset Title", Description="Asset Description")															
+upload.upload_zip_package(path_to_zip_package=package_path)
+
+folder = client.folder("19a2261c-b284-46bc-a268-84e974c67a41")
+package = simple_asset_package(preservation_file="C:\manual-upload\WindowsInstallationGuide.zip", parent_folder=folder)
+upload.upload_zip_package(package)
+
+
+
